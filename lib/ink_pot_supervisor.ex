@@ -1,14 +1,18 @@
 defmodule InkPotSupervisor do
   use Supervisor
+  use Painter, color: :magenta, name: "Sup"
   @compile :debug_info
 
-  def start_link(_children, _options) do
-    current_pid = self()
-    spawn(fn -> send(current_pid, {self(), "hello"}) end)
+  def start_link(children, application_pid, _options) do
+    supervisor_pid = self()
+    log(supervisor_pid, label: "started")
+    log(application_pid, label: "input PID")
+
+    {:ok, child_pid} = Supervisor.start_link(children, strategy: :one_for_one)
   end
 
   @impl true
   def init(options) do
-    IO.inspect(options, label: "options")
+    log(options, label: "options")
   end
 end

@@ -1,36 +1,21 @@
 defmodule InkPot do
   use Application
+  use Painter, color: :cyan, name: "App"
 
   @moduledoc """
   Documentation for InkPot.
   """
 
-  @doc """
-  Hello world.
-  ## Examples
-      iex> InkPot.hello()
-      :world
-  """
-  def hello do
-    :world
-  end
-
   # has to start and spawn a process via a supervisor
   # and return its pid
-  def start(type, args) do
-    IO.inspect(type, label: "type")
-    IO.inspect(args, label: "args")
+  def start(_type, _args) do
+    application_pid = self()
+    log(application_pid, label: "started")
     children = [
-      %{id: Ink, start: {Ink, :start_link, [[]]}}
+      %{id: Ink, start: {Ink, :start_link, [application_pid]}}
     ]
 
     children
-    |> InkPotSupervisor.start_link(strategy: :one_for_one)
-    |> do_start()
-  end
-
-  defp do_start(pid) when is_pid(pid), do: {:ok, pid}
-  defp do_start(pid) do
-    exit(1)
+    |> InkPotSupervisor.start_link(application_pid, strategy: :one_for_one)
   end
 end
