@@ -27,7 +27,7 @@ defmodule Paper do
 
   defp handle_up(app_id, counter) do
     log(counter, label: "got")
-    wait(app_id, counter + 1)
+    wait(app_id, {:DID_UP, counter + 1})
   end
 
   defp handle_message(app_id, message) do
@@ -37,6 +37,6 @@ defmodule Paper do
 
   defp handle_down(app_id, counter) do
     log(counter, label: "got")
-    wait(app_id, counter - 1)
+    wait(app_id, {:DID_DOWN, counter - 1})
   end
 end

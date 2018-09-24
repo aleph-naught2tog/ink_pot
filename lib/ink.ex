@@ -25,12 +25,12 @@ defmodule Ink do
 
   def handle_left(app_id, counter) do
     log(counter, label: "got")
-    wait(app_id, counter)
+    wait(app_id, {:DID_LEFT, counter})
   end
 
   def handle_right(app_id, counter) do
     log(counter, label: "got")
-    wait(app_id, counter)
+    wait(app_id, {:DID_RIGHT, counter})
   end
 
   def handle_message(app_id, message) do
