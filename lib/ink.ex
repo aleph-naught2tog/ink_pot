@@ -19,7 +19,8 @@ defmodule Ink do
     receive do
       {:ok, ^app_id, {:LEFT, counter}} -> handle_left(app_id, counter)
       {:ok, ^app_id, {:RIGHT, counter}} -> handle_right(app_id, counter)
-      {:ok, ^app_id, message} -> handle_message(app_id, message)
+      {:ok, ^app_id, message} -> handle_message(app_id, {:NO_CHANGE, message})
+      _ -> log("--- Failing ---")
     end
   end
 

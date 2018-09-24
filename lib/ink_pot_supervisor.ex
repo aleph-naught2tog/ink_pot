@@ -29,7 +29,7 @@ defmodule InkPotSupervisor do
     receive do
       {:ok, return_address, message} ->
         log(message, label: "got")
-        send(return_address, {:ok, self(), {:UP, count |> rem(80)}})
+        send(return_address, {:ok, self(), {:DOWN, count |> rem(80)}})
         block(count + 1)
     end
   end

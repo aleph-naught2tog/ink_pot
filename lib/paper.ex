@@ -21,7 +21,8 @@ defmodule Paper do
     receive do
       {:ok, ^app_id, {:UP, counter}} -> handle_up(app_id, counter)
       {:ok, ^app_id, {:DOWN, counter}} -> handle_down(app_id, counter)
-      {:ok, ^app_id, message} -> handle_message(app_id, message)
+      {:ok, ^app_id, message} -> handle_message(app_id, {:NO_CHANGE, message})
+      _ -> log("--- Failing ---")
     end
   end
 
