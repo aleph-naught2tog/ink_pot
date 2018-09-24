@@ -12,7 +12,8 @@ defmodule InkPot do
     application_pid = self()
     log(application_pid, label: "started")
     children = [
-      %{id: Ink, start: {Ink, :start_link, [application_pid]}}
+      %{id: Ink, start: {Ink, :start_link, [application_pid]}},
+      %{id: Paper, start: {Paper, :start_link, [application_pid]}}
     ]
 
     children

@@ -1,10 +1,12 @@
-defmodule Ink do
-  use Painter, color: :light_yellow, name: "Ink"
+defmodule Paper do
+  use Painter, color: :green, name: "Paper"
+
   def start_link(app_id) do
     pid = self()
     log(pid, label: "started")
     log(app_id, label: "args")
-    spawn Ink.listen(app_id)
+
+    spawn Paper.listen(app_id)
     {:ok, pid}
   end
 
@@ -17,24 +19,24 @@ defmodule Ink do
   def wait(app_id, input) do
     send(app_id, {:ok, self(), input})
     receive do
-      {:ok, ^app_id, {:LEFT, counter}} -> handle_left(app_id, counter)
-      {:ok, ^app_id, {:RIGHT, counter}} -> handle_right(app_id, counter)
+      {:ok, ^app_id, {:UP, counter}} -> handle_up(app_id, counter)
+      {:ok, ^app_id, {:DOWN, counter}} -> handle_down(app_id, counter)
       {:ok, ^app_id, message} -> handle_message(app_id, message)
     end
   end
 
-  def handle_left(app_id, counter) do
+  defp handle_up(app_id, counter) do
     log(counter, label: "got")
-    wait(app_id, counter)
+    wait(app_id, counter + 1)
   end
 
-  def handle_right(app_id, counter) do
-    log(counter, label: "got")
-    wait(app_id, counter)
-  end
-
-  def handle_message(app_id, message) do
+  defp handle_message(app_id, message) do
     log(message, label: "got")
     wait(app_id, message)
+  end
+
+  defp handle_down(app_id, counter) do
+    log(counter, label: "got")
+    wait(app_id, counter - 1)
   end
 end
